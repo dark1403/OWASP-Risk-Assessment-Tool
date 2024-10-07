@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OWASP Risk Assessment Tool</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+    <div class="container mx-auto p-8">
+        <!-- Title -->
+        <h1 class="text-4xl font-bold text-center mb-8">OWASP Risk Assessment Tool</h1>
+
+        <!-- Radar Chart -->
+        <div class="flex justify-center mb-6">
+            <canvas id="riskChart" width="400" height="400"></canvas>
+        </div>
+
+        <!-- Threat Agent Factors -->
+        <h2 class="text-xl font-semibold mb-4">Threat Agent Factors</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="skillLevel">Skill level</label>
+                <select id="skillLevel" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">No technical skills (1)</option>
+                    <option value="2">Some technical skills (2)</option>
+                    <option value="3">Advanced computer user (3)</option>
+                    <option value="5">Network and system administrator (5)</option>
+                    <option value="6">Security penetration tester (6)</option>
+                    <option value="9">Security researcher (9)</option>
+                </select>
+            </div>
+            <div>
+                <label for="motive">Motive</label>
+                <select id="motive" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">Low or no reward (1)</option>
+                    <option value="4">Possible reward (4)</option>
+                    <option value="9">High reward (9)</option>
+                </select>
+            </div>
+            <div>
+                <label for="opportunity">Opportunity</label>
+                <select id="opportunity" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">Full access or expensive resources required (1)</option>
+                    <option value="4">Special access or resources required (4)</option>
+                    <option value="9">No access required (9)</option>
+                </select>
+            </div>
+            <div>
+                <label for="size">Size</label>
+                <select id="size" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="2">Developers, System administrators (2)</option>
+                    <option value="6">Corporate IT staff (6)</option>
+                    <option value="9">General public (9)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Vulnerability Factors -->
+        <h2 class="text-xl font-semibold mt-8 mb-4">Vulnerability Factors</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="easeDiscovery">Ease of discovery</label>
+                <select id="easeDiscovery" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">Practically impossible (1)</option>
+                    <option value="3">Difficult (3)</option>
+                    <option value="7">Easy (7)</option>
+                    <option value="9">Automated tools available (9)</option>
+                </select>
+            </div>
+            <div>
+                <label for="easeExploit">Ease of exploit</label>
+                <select id="easeExploit" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">Theoretical (1)</option>
+                    <option value="3">Difficult (3)</option>
+                    <option value="5">Easy (5)</option>
+                    <option value="9">Automated tools available (9)</option>
+                </select>
+            </div>
+            <div>
+                <label for="awareness">Awareness</label>
+                <select id="awareness" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">Unknown (1)</option>
+                    <option value="4">Hidden (4)</option>
+                    <option value="6">Obvious (6)</option>
+                </select>
+            </div>
+            <div>
+                <label for="intrusionDetection">Intrusion detection</label>
+                <select id="intrusionDetection" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">None (1)</option>
+                    <option value="4">Logged and reviewed sometimes (4)</option>
+                    <option value="9">Always logged and reviewed (9)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Technical Impact Factors -->
+        <h2 class="text-xl font-semibold mt-8 mb-4">Technical Impact Factors</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="confidentiality">Loss of confidentiality</label>
+                <select id="confidentiality" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="2">Minimal non-sensitive data disclosed (2)</option>
+                    <option value="6">Some non-sensitive data disclosed (6)</option>
+                    <option value="7">Extensive non-sensitive data disclosed (7)</option>
+                </select>
+            </div>
+            <div>
+                <label for="integrity">Loss of integrity</label>
+                <select id="integrity" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">Minimal slightly corrupt data (1)</option>
+                    <option value="5">Moderate corrupt data (5)</option>
+                    <option value="9">Extensive serious data corruption (9)</option>
+                </select>
+            </div>
+            <div>
+                <label for="availability">Loss of availability</label>
+                <select id="availability" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">Minimal secondary services interrupted (1)</option>
+                    <option value="5">Minimal primary services interrupted (5)</option>
+                    <option value="7">Extensive secondary services interrupted (7)</option>
+                    <option value="9">All services completely lost (9)</option>
+                </select>
+            </div>
+            <div>
+                <label for="accountability">Loss of accountability</label>
+                <select id="accountability" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">Fully traceable (1)</option>
+                    <option value="7">Possibly traceable (7)</option>
+                    <option value="9">Completely anonymous (9)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Business Impact Factors -->
+        <h2 class="text-xl font-semibold mt-8 mb-4">Business Impact Factors</h2>
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label for="financialDamage">Financial damage</label>
+                <select id="financialDamage" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">Less than the cost to fix the vulnerability (1)</option>
+                    <option value="3">Minor effect on annual profit (3)</option>
+                    <option value="5">Significant effect on annual profit (5)</option>
+                </select>
+            </div>
+            <div>
+                <label for="reputationDamage">Reputation damage</label>
+                <select id="reputationDamage" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">Minimal damage (1)</option>
+                    <option value="4">Loss of major accounts (4)</option>
+                    <option value="9">Brand damage is obvious to everyone (9)</option>
+                </select>
+            </div>
+            <div>
+                <label for="nonCompliance">Non-compliance</label>
+                <select id="nonCompliance" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="2">Minor violation (2)</option>
+                    <option value="5">Clear violation (5)</option>
+                    <option value="7">High-profile violation (7)</option>
+                </select>
+            </div>
+            <div>
+                <label for="criticality">Criticality</label>
+                <select id="criticality" class="w-full border border-gray-300 rounded px-4 py-2">
+                    <option value="1">Non-critical (1)</option>
+                    <option value="5">Critical (5)</option>
+                    <option value="9">Mission-critical (9)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="flex justify-center mt-8">
+            <button onclick="calculateRisk()" class="bg-blue-500 text-white px-4 py-2 rounded">Calculate Risk</button>
+        </div>
+
+        <div id="riskResult" class="text-center mt-8 hidden">
+            <h2 class="text-2xl font-semibold">Risk Assessment Results</h2>
+            <p id="riskScore" class="text-xl mt-4"></p>
+        </div>
+    </div>
+
+    <script>
+        function calculateRisk() {
+            // Get the values from the form
+            const skillLevel = parseInt(document.getElementById("skillLevel").value);
+            const motive = parseInt(document.getElementById("motive").value);
+            const opportunity = parseInt(document.getElementById("opportunity").value);
+            const size = parseInt(document.getElementById("size").value);
+            const easeDiscovery = parseInt(document.getElementById("easeDiscovery").value);
+            const easeExploit = parseInt(document.getElementById("easeExploit").value);
+            const awareness = parseInt(document.getElementById("awareness").value);
+            const intrusionDetection = parseInt(document.getElementById("intrusionDetection").value);
+            const confidentiality = parseInt(document.getElementById("confidentiality").value);
+            const integrity = parseInt(document.getElementById("integrity").value);
+            const availability = parseInt(document.getElementById("availability").value);
+            const accountability = parseInt(document.getElementById("accountability").value);
+            const financialDamage = parseInt(document.getElementById("financialDamage").value);
+            const reputationDamage = parseInt(document.getElementById("reputationDamage").value);
+            const nonCompliance = parseInt(document.getElementById("nonCompliance").value);
+            const criticality = parseInt(document.getElementById("criticality").value);
+
+            // Calculate the risk score based on the selected values
+            const riskFactors = [
+                skillLevel,
+                motive,
+                opportunity,
+                size,
+                easeDiscovery,
+                easeExploit,
+                awareness,
+                intrusionDetection,
+                confidentiality,
+                integrity,
+                availability,
+                accountability,
+                financialDamage,
+                reputationDamage,
+                nonCompliance,
+                criticality
+            ];
+
+            // Update radar chart
+            updateRadarChart(riskFactors);
+
+            // Calculate risk score
+            const riskScore = riskFactors.reduce((a, b) => a + b, 0);
+            document.getElementById("riskScore").innerText = `Risk Score: ${riskScore}`;
+            document.getElementById("riskResult").classList.remove("hidden");
+        }
+
+        // Radar chart setup
+        let riskChart;
+
+        function updateRadarChart(data) {
+            const ctx = document.getElementById('riskChart').getContext('2d');
+
+            if (riskChart) {
+                riskChart.destroy(); // Destroy previous chart instance
+            }
+
+            riskChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        'Skill Level', 'Motive', 'Opportunity', 'Size',
+                        'Ease of Discovery', 'Ease of Exploit', 'Awareness', 'Intrusion Detection',
+                        'Confidentiality', 'Integrity', 'Availability', 'Accountability',
+                        'Financial Damage', 'Reputation Damage', 'Non-Compliance', 'Criticality'
+                    ],
+                    datasets: [{
+                        label: 'Risk Factors',
+                        data: data,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                    }]
+                },
+                options: {
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 9
+                        }
+                    },
+                    elements: {
+                        line: {
+                            tension: 0.1
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
